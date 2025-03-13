@@ -2,7 +2,11 @@
 
 This action allows you to generate a CodeQL fixer report.
 
-This action queries the CodeQL API to get a list of users who are fixing alerts in your repositories, producing a CSV report that summarizes the number of fixes by each developer.
+This action queries the CodeQL API to get a list of users who are fixing historical alerts in your repositories, producing a CSV report that summarizes the number of fixes by each developer.
+
+Note: 
+- New alerts introduced on a PR and fixed before merging into the default branch will not be counted.
+- this finds alerts that have been `fixed` - which implies the lack of a CodeQL finding (this can mean code was patched, removed, or even a scan configuration changed)
 
 ## Usage
 
