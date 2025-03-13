@@ -25,6 +25,9 @@ on:
 jobs:
   run-report:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: read
 
     steps:
     - name: Use felickz/codeql-fixer-report action
@@ -40,13 +43,13 @@ jobs:
 
 In this example, the felickz/codeql-fixer-report action is used from the `main` branch directly.  The report is run every 12 hours via cron schedule.
 
-The github-token input is required for the felickz/codeql-fixer-report action. It uses the GITHUB_TOKEN secret, which would need to have `metadata:read` and `actions:read` permissions for your organization for any private repos.
+The github-token input is required for the felickz/codeql-fixer-report action. It uses the GITHUB_TOKEN secret, which would need to have `contents: read` and `security-events: read` permissions for your organization for any private repos.
 
 The `upload-artfact` action is used to create the CSV attached to the action workflow summary.
 
 ## Inputs
 ### token
-Required The GitHub token to authenticate and pull CodeQL Action workflow status with. Needs to have `metadata:read` and `actions:read` permissions for your organization's private repos.
+Required The GitHub token to authenticate and pull CodeQL Action workflow status with. Needs to have `contents: read` and `security-events: read` permissions for your organization's private repos.
 
 ### organization
 Optional The GitHub Organization. Defaults to the current Organization.
