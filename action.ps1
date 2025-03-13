@@ -57,7 +57,7 @@ if ([String]::IsNullOrWhiteSpace($GitHubRepository)) {
 
 $nwo = "$GitHubOrganization/$GitHubRepository"
 $state = "fixed" # NOTE - fixed means alert was not present in a subsequent scan - which might introduce noise if a code scanning config was removed
-$alerts = gh api "/repos/$nwo/code-scanning/alerts?state=$state" --paginate | ConvertFrom-Json
+$alerts = gh api "/repos/$nwo/code-scanning/alerts?state=$state&tool_name=CodeQL" --paginate | ConvertFrom-Json
 
 # Loop through each alert and build a list of users who fixed them and keep a count
 $commitCache = @{}
@@ -109,7 +109,14 @@ else {
     Install-Module -Name FormatMarkdownTable
 }
 
-$markdownSummary = Import-Csv -Path "./$csv" | Format-MarkdownTableTableStyle -ShowMarkdown -DoNotCopyToClipboard -HideStandardOutput
+# Create a header for the markdown report
+$reportHeader = "# CodeQL Fixers Report`n`n"
+$reportHeader += "This report shows users who have fixed CodeQL alerts in repository $nwo.`n`n"
+
+# Generate the markdown table and add the header
+$markdownTable = Import-Csv -Path "./$csv" | Format-MarkdownTableTableStyle -ShowMarkdown -DoNotCopyToClipboard -HideStandardOutput
+$markdownSummary = $reportHeader + $markdownTable
+
 $markdownSummary > $env:GITHUB_STEP_SUMMARY
 
 if ($null -eq $env:GITHUB_ACTIONS) {
