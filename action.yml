@@ -1,0 +1,19 @@
+name: 'CodeQL Fixer Report Action'
+description: 'A GitHub action that queries the CodeQL API to get a list of users who are fixing alerts'
+inputs:
+  token:
+    description: 'GitHub Access Token that provides access to the organization. Must be provided via either parameter or environment variable GH_TOKEN. The github.token can only be used for public repositories.'
+    required: false
+  organization:
+    description: 'GitHub Organization name.  Provide via this parameter or will use the value from the current organization found at GITHUB_REPOSITORY_OWNER.'
+    required: false
+    default: '""'
+  repository:
+    description: 'GitHub Repository name. Provide via this parameter or will use the value from the current repository name found in GITHUB_REPOSITORY.'
+    required: false
+    default: '""'
+runs:
+  using: 'composite'
+  steps:
+    - run: ${{ github.action_path }}/action.ps1 -GitHubToken ${{ inputs.token }} -GitHubOrganization ${{ inputs.organization }} -GitHubRepository ${{ inputs.repository }}
+      shell: pwsh

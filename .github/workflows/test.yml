@@ -1,0 +1,16 @@
+name: Test Workflow
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run my GitHub action
+        uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # organization and repository will default to the current context
